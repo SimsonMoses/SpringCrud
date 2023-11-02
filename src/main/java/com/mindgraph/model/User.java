@@ -25,6 +25,6 @@ public class User {
     private int userPhoneNumber;
     private String userDepartment;
     private String userJoiningDate;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userId")
     private List<Address> userAllAddress;
 }
