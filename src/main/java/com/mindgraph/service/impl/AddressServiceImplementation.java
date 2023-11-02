@@ -66,4 +66,27 @@ public class AddressServiceImplementation implements AddressService {
         }
         return response;
     }
+
+    @Override
+    public CommonResponse updateAddress(Address updatedAddress){
+        CommonResponse response = new CommonResponse();
+//        log.info("updatedAddress: "+updatedAddress);
+        Address address = addressRepository.findById(updatedAddress.getAddressId()).orElseThrow(() -> new ObjectNotFoundException("Data not found", new Address()));
+        log.info("updateAddressMethod: address: "+address.getAddressId());
+        log.info("Address: "+address);
+        updatedAddress.setAddressId(address.getAddressId());
+        if(address!=null){
+            addressRepository.save(updatedAddress);
+            response.setCode(200);
+            response.setStatus(ResponseStatus.SUCCESS);
+            response.setSuccessMessage("User Updated Successfully!");
+            response.setData(address);
+        }else {
+            response.setCode(404);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setSuccessMessage("Address doesn't exist!");
+            response.setData(updatedAddress);
+        }
+        return response;
+    }
 }

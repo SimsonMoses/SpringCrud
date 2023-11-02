@@ -29,4 +29,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Address> userAllAddress;
+    @Override
+    public String toString(){
+        return "User to String";
+    }
 }
