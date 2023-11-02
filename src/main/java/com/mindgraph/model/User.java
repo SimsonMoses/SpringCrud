@@ -27,6 +27,6 @@ public class User {
     private String userDepartment;
     private String userJoiningDate;
     @JsonIgnore
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "user")
     private List<Address> userAllAddress;
 }

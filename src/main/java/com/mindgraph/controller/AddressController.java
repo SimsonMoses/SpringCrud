@@ -26,4 +26,18 @@ public class AddressController {
         }
         return response;
     }
+
+    @GetMapping("getAddressByUserId")
+    public CommonResponse getAddressByUserId(@RequestParam Long userId){
+        CommonResponse response = new CommonResponse();
+        try{
+            response = addressService.getAddressByUserId(userId);
+        }catch (Exception ex){
+            response.setCode(500);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setData(ex.getMessage());
+            response.setErrorMessage("Something went wrong. Please try again later");
+        }
+        return response;
+    }
 }
