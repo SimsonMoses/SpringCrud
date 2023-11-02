@@ -11,18 +11,18 @@ import lombok.ToString;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long addressId;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
     @Column(name = "door_no")
     private String doorNo;
-    @Column(name = "street_name",length = 30)
+    @Column(name = "street_name", length = 30)
     private String streetName;
-    @Column(name = "land_mark",length = 30)
+    @Column(name = "land_mark", length = 30)
     private String landMark;
-    @Column(name = "district",length = 25)
+    @Column(name = "district", length = 25)
     private String district;
     @Column(length = 6)
     private int pincode;
