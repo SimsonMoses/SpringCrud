@@ -1,6 +1,7 @@
 package com.mindgraph.controller;
 
 import com.mindgraph.enumeration.ResponseStatus;
+import com.mindgraph.model.User;
 import com.mindgraph.request.CreateUser;
 import com.mindgraph.response.CommonResponse;
 import com.mindgraph.service.UserService;
@@ -71,4 +72,17 @@ public class UserController {
         return response;
     }
 
+    @PutMapping("updateUser")
+    public CommonResponse updateUser(@RequestBody User user){
+        CommonResponse response = new CommonResponse();
+        try{
+            response = userService.updateUser(user);
+        }catch (Exception ex){
+            response.setCode(500);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setData(ex.getMessage());
+            response.setErrorMessage("Something went wrong. Please try again later");
+        }
+        return response;
+    }
 }
