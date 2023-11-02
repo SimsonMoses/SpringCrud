@@ -1,4 +1,8 @@
 package com.mindgraph.service;
 
-public class UserService {
+import com.mindgraph.request.CreateUser;
+import com.mindgraph.response.CommonResponse;
+
+public interface UserService {
+    public CommonResponse createUser(CreateUser user);
 }
