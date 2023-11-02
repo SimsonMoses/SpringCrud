@@ -13,8 +13,8 @@ public class Address {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long addressId;
-    @OneToOne
-    @JoinColumn(referencedColumnName = "userId")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User userId;
     @Column(name = "door_no")
     private String doorNo;
@@ -30,7 +30,4 @@ public class Address {
     private String state;
     @Column(length = 25)
     private String country;
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private User user;
 }
