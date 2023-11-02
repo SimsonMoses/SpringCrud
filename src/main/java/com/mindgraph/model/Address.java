@@ -6,16 +6,12 @@ import lombok.ToString;
 
 @Table(name = "address")
 @Entity
-@ToString
 @Data
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long addressId;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
     @Column(name = "door_no")
     private String doorNo;
     @Column(name = "street_name", length = 30)
@@ -30,4 +26,12 @@ public class Address {
     private String state;
     @Column(length = 25)
     private String country;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Override
+    public String toString(){
+        return "Address to String";
+    }
 }
