@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CreateAddress {
+    private Long userId;
     private String doorNo;
     private String streetName;
     private String landMark;
