@@ -6,10 +6,10 @@ import com.mindgraph.repository.UserRepository;
 import com.mindgraph.request.CreateUser;
 import com.mindgraph.response.CommonResponse;
 import com.mindgraph.service.UserService;
+import org.hibernate.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -88,6 +88,25 @@ public class UserServiceImplementation implements UserService {
             response.setStatus(ResponseStatus.FAILED);
             response.setSuccessMessage("User With the email doesn't exist!");
             response.setData(userPhoneNumber);
+        }
+        return response;
+    }
+
+    @Override
+    public CommonResponse updateUser(User userUpdated){
+        CommonResponse response = new CommonResponse();
+        User user = userRepository.findById(userUpdated.getUserId()).orElseThrow(() -> new ObjectNotFoundException("Data not found", new User()));
+        if(user!=null){
+            userRepository.save(userUpdated);
+            response.setCode(200);
+            response.setStatus(ResponseStatus.SUCCESS);
+            response.setSuccessMessage("User Updated Successfully!");
+            response.setData(user);
+        }else {
+            response.setCode(404);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setSuccessMessage("User doesn't exist!");
+            response.setData(userUpdated);
         }
         return response;
     }
