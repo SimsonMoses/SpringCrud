@@ -10,4 +10,5 @@ public interface UserService {
     public CommonResponse getUserByUserEmail(String userEmail);
     public CommonResponse getUserByPhoneNumber(int userPhoneNumber);
     public CommonResponse updateUser(User userUpdated);
+    public CommonResponse deleteUser(Long userId);
 }
