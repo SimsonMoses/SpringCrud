@@ -17,11 +17,11 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("createUser")
-    public CommonResponse createUser(@Validated @RequestBody CreateUser createUser){
+    public CommonResponse createUser(@Validated @RequestBody CreateUser createUser) {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = userService.createUser(createUser);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());
@@ -31,11 +31,11 @@ public class UserController {
     }
 
     @GetMapping("getAllUsers")
-    public CommonResponse getAllUsers(){
+    public CommonResponse getAllUsers() {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = userService.getAllUsers();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());
@@ -45,11 +45,11 @@ public class UserController {
     }
 
     @GetMapping("getUserByEmail")
-    public CommonResponse getUserByUserEmail(@RequestParam String userEmail){
+    public CommonResponse getUserByUserEmail(@RequestParam String userEmail) {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = userService.getUserByUserEmail(userEmail);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());
@@ -59,11 +59,11 @@ public class UserController {
     }
 
     @GetMapping("getUserByPhoneNumber")
-    public CommonResponse getUserByPhoneNumber(@RequestParam int userPhoneNumber){
+    public CommonResponse getUserByPhoneNumber(@RequestParam int userPhoneNumber) {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = userService.getUserByPhoneNumber(userPhoneNumber);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());
@@ -73,11 +73,11 @@ public class UserController {
     }
 
     @PutMapping("updateUser")
-    public CommonResponse updateUser(@RequestBody User user){
+    public CommonResponse updateUser(@RequestBody User user) {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = userService.updateUser(user);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());
@@ -85,4 +85,19 @@ public class UserController {
         }
         return response;
     }
+
+    @DeleteMapping("deleteUser")
+    public CommonResponse deleteUser(@RequestParam Long userId){
+        CommonResponse response = new CommonResponse();
+        try {
+            response = userService.deleteUser(userId);
+        } catch (Exception ex) {
+            response.setCode(500);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setData(ex.getMessage());
+            response.setErrorMessage("Something went wrong. Please try again later");
+        }
+        return response;
+    }
+
 }

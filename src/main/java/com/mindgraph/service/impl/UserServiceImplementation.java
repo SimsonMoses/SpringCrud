@@ -110,4 +110,22 @@ public class UserServiceImplementation implements UserService {
         }
         return response;
     }
+
+    @Override
+    public CommonResponse deleteUser(Long userId) {
+        CommonResponse response = new CommonResponse();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("Data not found", new User()));
+        if(user!=null){
+            userRepository.deleteById(userId);
+            response.setCode(200);
+            response.setStatus(ResponseStatus.SUCCESS);
+            response.setSuccessMessage("User deleted Successfully!");
+            response.setData(user);
+        }else {
+            response.setCode(404);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setSuccessMessage("User doesn't exist!");
+        }
+        return response;
+    }
 }
