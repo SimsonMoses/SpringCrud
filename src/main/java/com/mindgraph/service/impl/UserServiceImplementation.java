@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImplementation implements UserService {
 
@@ -34,6 +36,58 @@ public class UserServiceImplementation implements UserService {
             response.setStatus(ResponseStatus.FAILED);
             response.setErrorMessage("User with phone or email already exists!");
             response.setData(createUser);
+        }
+        return response;
+    }
+
+    @Override
+    public CommonResponse getAllUsers(){
+        CommonResponse response = new CommonResponse();
+        List<User> users = userRepository.findAll();
+        if(!users.isEmpty()){
+            response.setCode(200);
+            response.setStatus(ResponseStatus.SUCCESS);
+            response.setSuccessMessage("Users have retrived successfully");
+            response.setData(users);
+        }else{
+            response.setCode(404);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setErrorMessage("No Users Exists!");
+        }
+        return response;
+    }
+
+    @Override
+    public CommonResponse getUserByUserEmail(String userEmail) {
+        CommonResponse response = new CommonResponse();
+        User user = userRepository.findByUserEmail(userEmail);
+        if(user!=null){
+            response.setCode(200);
+            response.setStatus(ResponseStatus.SUCCESS);
+            response.setSuccessMessage("User With the email fetched Successfully");
+            response.setData(user);
+        }else {
+            response.setCode(404);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setSuccessMessage("User With the email doesn't exist!");
+            response.setData(userEmail);
+        }
+        return response;
+    }
+    @Override
+    public CommonResponse getUserByPhoneNumber(int userPhoneNumber){
+        CommonResponse response = new CommonResponse();
+        User user = userRepository.findByUserPhoneNumber(userPhoneNumber);
+        if(user!=null){
+            response.setCode(200);
+            response.setStatus(ResponseStatus.SUCCESS);
+            response.setSuccessMessage("User With the Phone Number fetched Successfully");
+            response.setData(user);
+        }else{
+            response.setCode(404);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setSuccessMessage("User With the email doesn't exist!");
+            response.setData(userPhoneNumber);
         }
         return response;
     }

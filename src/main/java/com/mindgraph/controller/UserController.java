@@ -6,10 +6,7 @@ import com.mindgraph.response.CommonResponse;
 import com.mindgraph.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("user")
@@ -23,6 +20,48 @@ public class UserController {
         CommonResponse response = new CommonResponse();
         try{
             response = userService.createUser(createUser);
+        }catch (Exception ex){
+            response.setCode(500);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setData(ex.getMessage());
+            response.setErrorMessage("Something went wrong. Please try again later");
+        }
+        return response;
+    }
+
+    @GetMapping("getAllUsers")
+    public CommonResponse getAllUsers(){
+        CommonResponse response = new CommonResponse();
+        try{
+            response = userService.getAllUsers();
+        }catch (Exception ex){
+            response.setCode(500);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setData(ex.getMessage());
+            response.setErrorMessage("Something went wrong. Please try again later");
+        }
+        return response;
+    }
+
+    @GetMapping("getUserByEmail")
+    public CommonResponse getUserByUserEmail(@RequestParam String userEmail){
+        CommonResponse response = new CommonResponse();
+        try{
+            response = userService.getUserByUserEmail(userEmail);
+        }catch (Exception ex){
+            response.setCode(500);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setData(ex.getMessage());
+            response.setErrorMessage("Something went wrong. Please try again later");
+        }
+        return response;
+    }
+
+    @GetMapping("getUserByPhoneNumber")
+    public CommonResponse getUserByPhoneNumber(@RequestParam int userPhoneNumber){
+        CommonResponse response = new CommonResponse();
+        try{
+            response = userService.getUserByPhoneNumber(userPhoneNumber);
         }catch (Exception ex){
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
