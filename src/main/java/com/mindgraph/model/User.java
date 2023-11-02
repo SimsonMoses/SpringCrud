@@ -1,5 +1,6 @@
 package com.mindgraph.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ public class User {
     private int userPhoneNumber;
     private String userDepartment;
     private String userJoiningDate;
+    @JsonIgnore
     @OneToMany(mappedBy = "userId")
     private List<Address> userAllAddress;
 }

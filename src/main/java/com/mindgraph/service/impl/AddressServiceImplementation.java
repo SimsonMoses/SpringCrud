@@ -7,11 +7,13 @@ import com.mindgraph.repository.UserRepository;
 import com.mindgraph.request.CreateAddress;
 import com.mindgraph.response.CommonResponse;
 import com.mindgraph.service.AddressService;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 public class AddressServiceImplementation implements AddressService {
 
     @Autowired
@@ -22,12 +24,13 @@ public class AddressServiceImplementation implements AddressService {
     private ModelMapper modelMapper;
 
     @Override
-    public CommonResponse createAddressForUser(Long userId, CreateAddress createAddress) {
+    public CommonResponse createAddressForUser(CreateAddress createAddress) {
         CommonResponse response = new CommonResponse();
-        boolean isUserExists = userRepository.existsById(userId);
+        boolean isUserExists = userRepository.existsById(createAddress.getUserId());
         if (isUserExists) {
             Address address = modelMapper.map(createAddress, Address.class);
-            addressRepository.save(address);
+            Address save = addressRepository.save(address);
+            log.info("Create Address: "+address);
             response.setCode(200);
             response.setStatus(ResponseStatus.SUCCESS);
             response.setSuccessMessage("Address has been created successfully");
@@ -36,7 +39,7 @@ public class AddressServiceImplementation implements AddressService {
             response.setCode(404);
             response.setStatus(ResponseStatus.FAILED);
             response.setErrorMessage("User doesn't Exists!");
-            response.setData(userId);
+            response.setData(createAddress.getUserId());
         }
         return response;
     }

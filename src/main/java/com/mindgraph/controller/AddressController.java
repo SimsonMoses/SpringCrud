@@ -14,10 +14,10 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
     @PostMapping("createAddressForUser")
-    public CommonResponse createAddressForUser(@RequestParam Long userId, @RequestBody CreateAddress createAddress){
+    public CommonResponse createAddressForUser(@RequestBody CreateAddress createAddress){
         CommonResponse response = new CommonResponse();
         try{
-            response = addressService.createAddressForUser(userId,createAddress);
+            response = addressService.createAddressForUser(createAddress);
         }catch (Exception ex){
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
