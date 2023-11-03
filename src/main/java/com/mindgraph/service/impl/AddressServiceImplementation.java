@@ -56,7 +56,7 @@ public class AddressServiceImplementation implements AddressService {
         if(user!=null && !addressRelatedToUser.isEmpty()){
             response.setCode(200);
             response.setStatus(ResponseStatus.SUCCESS);
-            response.setSuccessMessage("Address has been created successfully");
+            response.setSuccessMessage("Address has been feteched successfully");
             response.setData(addressRelatedToUser);
         }else {
             response.setCode(404);
@@ -79,7 +79,7 @@ public class AddressServiceImplementation implements AddressService {
             addressRepository.save(updatedAddress);
             response.setCode(200);
             response.setStatus(ResponseStatus.SUCCESS);
-            response.setSuccessMessage("User Updated Successfully!");
+            response.setSuccessMessage("Address Updated Successfully!");
             response.setData(address);
         }else {
             response.setCode(404);
