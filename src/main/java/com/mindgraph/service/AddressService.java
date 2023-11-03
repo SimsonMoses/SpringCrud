@@ -8,4 +8,5 @@ public interface AddressService {
     public CommonResponse createAddressForUser(CreateAddress createAddress);
     public CommonResponse getAddressByUserId(Long userId);
     public CommonResponse updateAddress(Address address);
+    public CommonResponse deleteAddressById(Long addressId);
 }
