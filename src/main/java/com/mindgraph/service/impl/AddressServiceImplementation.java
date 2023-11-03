@@ -89,4 +89,24 @@ public class AddressServiceImplementation implements AddressService {
         }
         return response;
     }
+
+    @Override
+    public CommonResponse deleteAddressById(Long addressId){
+        CommonResponse response = new CommonResponse();
+        boolean isAddressExist = addressRepository.existsById(addressId);
+        if(isAddressExist){
+            Address address = addressRepository.findById(addressId).orElseThrow(()->new ObjectNotFoundException("Data not Found Exception",Address.class));
+            addressRepository.deleteById(addressId);
+            response.setCode(200);
+            response.setStatus(ResponseStatus.SUCCESS);
+            response.setSuccessMessage("Address has deleted Successfully");
+            response.setData(address);
+        }else {
+            response.setCode(404);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setErrorMessage("Address Not Found");
+            response.setData(addressId);
+        }
+        return response;
+    }
 }

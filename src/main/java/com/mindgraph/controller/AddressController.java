@@ -55,4 +55,18 @@ public class AddressController {
         }
         return response;
     }
+
+    @DeleteMapping("deleteAddressById")
+    public CommonResponse deleteAddressById(@RequestParam Long addressId){
+        CommonResponse response = new CommonResponse();
+        try{
+            response = addressService.deleteAddressById(addressId);
+        }catch (Exception ex){
+            response.setCode(500);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setData(ex.getMessage());
+            response.setErrorMessage("Something went wrong. Please try again later");
+        }
+        return response;
+    }
 }
