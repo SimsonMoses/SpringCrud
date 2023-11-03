@@ -14,12 +14,13 @@ public class AddressController {
 
     @Autowired
     private AddressService addressService;
+
     @PostMapping("createAddressForUser")
-    public CommonResponse createAddressForUser(@RequestBody CreateAddress createAddress){
+    public CommonResponse createAddressForUser(@RequestBody CreateAddress createAddress) {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = addressService.createAddressForUser(createAddress);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());
@@ -29,11 +30,11 @@ public class AddressController {
     }
 
     @GetMapping("getAddressByUserId")
-    public CommonResponse getAddressByUserId(@RequestParam Long userId){
+    public CommonResponse getAddressByUserId(@RequestParam Long userId) {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = addressService.getAddressByUserId(userId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());
@@ -43,11 +44,11 @@ public class AddressController {
     }
 
     @PutMapping("updateAddress")
-    public CommonResponse updateAddress(@RequestBody Address address){
+    public CommonResponse updateAddress(@RequestBody Address address) {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = addressService.updateAddress(address);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());
@@ -57,11 +58,11 @@ public class AddressController {
     }
 
     @DeleteMapping("deleteAddressById")
-    public CommonResponse deleteAddressById(@RequestParam Long addressId){
+    public CommonResponse deleteAddressById(@RequestParam Long addressId) {
         CommonResponse response = new CommonResponse();
-        try{
+        try {
             response = addressService.deleteAddressById(addressId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setCode(500);
             response.setStatus(ResponseStatus.FAILED);
             response.setData(ex.getMessage());

@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @DeleteMapping("deleteUser")
-    public CommonResponse deleteUser(@RequestParam Long userId){
+    public CommonResponse deleteUser(@RequestParam Long userId) {
         CommonResponse response = new CommonResponse();
         try {
             response = userService.deleteUser(userId);
