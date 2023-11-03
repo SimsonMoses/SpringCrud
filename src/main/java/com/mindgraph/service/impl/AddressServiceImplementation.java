@@ -34,7 +34,7 @@ public class AddressServiceImplementation implements AddressService {
         if (isUserExists) {
             Address address = modelMapper.map(createAddress, Address.class);
             Address save = addressRepository.save(address);
-            log.info("Create Address: "+address);
+            log.info("Create Address: " + address);
             response.setCode(200);
             response.setStatus(ResponseStatus.SUCCESS);
             response.setSuccessMessage("Address has been created successfully");
@@ -51,18 +51,37 @@ public class AddressServiceImplementation implements AddressService {
     @Override
     public CommonResponse getAddressByUserId(Long userId) {
         CommonResponse response = new CommonResponse();
-        User user =userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("Data not found", new User()));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("Data not found", new User()));
         List<Address> addressRelatedToUser = addressRepository.findByUser(user);
-        if(user!=null && !addressRelatedToUser.isEmpty()){
+        if (user != null && !addressRelatedToUser.isEmpty()) {
             response.setCode(200);
             response.setStatus(ResponseStatus.SUCCESS);
             response.setSuccessMessage("Address has been created successfully");
             response.setData(addressRelatedToUser);
-        }else {
+        } else {
             response.setCode(404);
             response.setStatus(ResponseStatus.FAILED);
             response.setErrorMessage("User doesn't have the Address");
             response.setData(userId);
+        }
+        return response;
+    }
+
+    @Override
+    public CommonResponse deleteAddressByAddressId(Long addressId) {
+        CommonResponse response = new CommonResponse();
+        boolean isAddressExist = addressRepository.existsById(addressId);
+        if (isAddressExist) {
+            addressRepository.deleteById(addressId);
+            response.setCode(200);
+            response.setStatus(ResponseStatus.SUCCESS);
+            response.setSuccessMessage("Address has been deleted Successfully");
+            response.setData(addressId);
+        } else {
+            response.setCode(404);
+            response.setStatus(ResponseStatus.FAILED);
+            response.setSuccessMessage("Address doesn't exists!!");
+            response.setData(addressId);
         }
         return response;
     }
