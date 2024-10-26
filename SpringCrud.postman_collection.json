@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "af22978a-94ed-4c57-9f18-ab611e2e35f2",
+		"name": "SpringCrud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22972548",
+		"_collection_link": "https://lunar-desert-463345.postman.co/workspace/mind-graph~d52524cf-3a9e-4199-a33b-e63323830027/collection/22972548-af22978a-94ed-4c57-9f18-ab611e2e35f2?action=share&source=collection_link&creator=22972548"
+	},
+	"item": [
+		{
+			"name": "PostUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userFirstName\": \"John\",\r\n    \"userLastName\": \"Doe\",\r\n    \"userEmail\": \"johndoe@example.com\",\r\n    \"userGender\": \"Male\",\r\n    \"dateOfBirth\": \"1990-01-15\",\r\n    \"userPhoneNumber\": 1234567890,\r\n    \"userDepartment\": \"Engineering\",\r\n    \"userJoiningDate\": \"2023-11-01\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/user/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"user",
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostAddress",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":\"1\",\r\n    \"doorNo\": \"321\",\r\n    \"streetName\": \"Maintreet\",\r\n    \"landMark\": \"Near Park\",\r\n    \"district\": \"Sample District\",\r\n    \"pincode\": 12345,\r\n    \"state\": \"Sample State\",\r\n    \"country\": \"Sample Country\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/address/createAddressForUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"address",
+						"createAddressForUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUsers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/user/getAllUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"user",
+						"getAllUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserByEmail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/user/getUserByEmail?userEmail=simsm@example.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"user",
+						"getUserByEmail"
+					],
+					"query": [
+						{
+							"key": "userEmail",
+							"value": "simsm@example.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getByUserByPhoneNumber",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/user/getUserByPhoneNumber?userPhoneNumber=765678",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"user",
+						"getUserByPhoneNumber"
+					],
+					"query": [
+						{
+							"key": "userPhoneNumber",
+							"value": "765678"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAddressByUserId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/address/getAddressByUserId?userId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"address",
+						"getAddressByUserId"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":1,\r\n    \"userFirstName\": \"sims\",\r\n    \"userLastName\": \"M\",\r\n    \"userEmail\": \"simsm@example.com\",\r\n    \"userGender\": \"Male\",\r\n    \"dateOfBirth\": \"1990-01-15\",\r\n    \"userPhoneNumber\": 765678,\r\n    \"userDepartment\": \"CST\",\r\n    \"userJoiningDate\": \"2023-11-01\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/user/updateUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"user",
+						"updateUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteRequest",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "udpateAddress",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"addressId\": 52,\r\n            \"userId\":\"2\",\r\n            \"user\": {\r\n                \"userId\": 2,\r\n                \"userFirstName\": \"John\",\r\n                \"userLastName\": \"Doe\",\r\n                \"userEmail\": \"johndoe@example.com\",\r\n                \"userGender\": \"Male\",\r\n                \"dateOfBirth\": \"1990-01-15\",\r\n                \"userPhoneNumber\": 1234567890,\r\n                \"userDepartment\": \"Engineering\",\r\n                \"userJoiningDate\": \"2023-11-01\"\r\n            },\r\n            \"doorNo\": \"771\",\r\n            \"streetName\": \"Maintreet\",\r\n            \"landMark\": \"Near Park\",\r\n            \"district\": \"Sample District\",\r\n            \"pincode\": 12345,\r\n            \"state\": \"TN\",\r\n            \"country\": \"India\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/address/updateAddress",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"address",
+						"updateAddress"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteAddress",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9001/address/deleteAddressById?addressId=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"address",
+						"deleteAddressById"
+					],
+					"query": [
+						{
+							"key": "addressId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
