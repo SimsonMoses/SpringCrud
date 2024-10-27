@@ -71,7 +71,7 @@ jobs:
           chmod 600 /home/runner/.ssh/id_rsa
 
       - name: SSH and Deploy on EC2
-        uses: appleboy/ssh-action@v0.1.3
+        uses: aws-actions/amazon-ecs-deploy-task-definition
         with:
           host: ${{ secrets.AWS_EC2_HOST }}
           username: ${{ secrets.AWS_EC2_USER }}
