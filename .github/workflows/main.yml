@@ -67,7 +67,7 @@ jobs:
       - name: Prepare SSH Key
         run: |
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa 
 
       - name: SSH and Deploy on EC2
         uses: appleboy/ssh-action@v0.1.3
@@ -76,6 +76,8 @@ jobs:
           username: ${{ secrets.AWS_EC2_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            echo "Deploying to EC2..."
+            echo "host:"+host+" username:"+username
             cd /path/to/your/docker-compose
             docker-compose down
             docker-compose pull content-ms
