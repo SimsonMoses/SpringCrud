@@ -66,8 +66,9 @@ jobs:
 
       - name: Prepare SSH Key
         run: |
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa 
+          mkdir -p /home/runner/.ssh  # Explicitly create the .ssh directory
+          echo "${{ secrets.SSH_KEY }}" > /home/runner/.ssh/id_rsa  # Write the SSH key to id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
 
       - name: SSH and Deploy on EC2
         uses: appleboy/ssh-action@v0.1.3
