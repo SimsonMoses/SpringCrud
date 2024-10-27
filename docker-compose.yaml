@@ -1,0 +1,45 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root    # Replace with a strong root password
+      MYSQL_DATABASE: springcrud         # Replace with your database name
+      MYSQL_USER: app                 # Replace with your database user
+      MYSQL_PASSWORD: root         # Replace with your database user password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - "3307:3306"
+    deploy:
+      replicas: 1
+
+  spring-web-app:
+    image: simsonmoses/spring-crud:latest
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/springcrud
+      SPRING_DATASOURCE_USERNAME: app
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - target: 9004
+        published: 9004
+        protocol: tcp
+        mode: host  # Ensures the service binds to the host network interface
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
