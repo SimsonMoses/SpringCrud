@@ -70,32 +70,33 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > /home/runner/.ssh/id_rsa  # Write the SSH key to id_rsa
           chmod 600 /home/runner/.ssh/id_rsa
 
-#      - name: SSH and Deploy on EC2
-#        uses: ssh-action/ssh-action@v2
-#        with:
-#          host: ${{ secrets.AWS_EC2_HOST }}
-#          username: ${{ secrets.AWS_EC2_USER }}
-#          key: ${{ secrets.SSH_KEY }}
-#          script: |
-#            echo "Deploying to EC2..."
-#            echo "host:"+${{ secrets.AWS_EC2_HOST }}+" username:"+${{ secrets.AWS_EC2_USER }}
-#            echo "key" > key && chmod 600 key
-#            ssh -o StrictHostKeyChecking=no -i key ${USER_NAME}@${HOSTNAME}
-#
-#            cd /path/to/your/docker-compose
-#            docker-compose down
-#            docker-compose pull content-ms
-#            docker-compose up -d --no-deps content-ms
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      - name: SSH and Deploy on EC2
+        uses: appleboy/ssh-action@v0.1.7
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - name: Redeploy Service on EC2
-        run: |
-          aws ssm send-command \
-            --document-name "AWS-RunShellScript" \
-            --targets '[{"Key":"InstanceIds","Values":["${{ secrets.EC2_INSTANCE_ID }}"]}]' \
-            --parameters 'commands=["cd /project/spring-curd/ && docker-compose pull spring-web-app && docker-compose up -d --no-deps spring-web-app"]' \
-            --comment "Redeploy application"
+          host: ${{ secrets.AWS_EC2_HOST }}
+          username: ${{ secrets.AWS_EC2_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.EC2_SSH_PASSPHRASE }}
+          script: |
+            echo "Deploying to EC2..."
+            echo "host:"+${{ secrets.AWS_EC2_HOST }}+" username:"+${{ secrets.AWS_EC2_USER }}
+            echo "key" > key && chmod 600 key
+            ssh -o StrictHostKeyChecking=no -i key ${USER_NAME}@${HOSTNAME}
+
+            cd /path/to/your/docker-compose
+            docker-compose down
+            docker-compose pull content-ms
+            docker-compose up -d --no-deps content-ms
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v2
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ secrets.AWS_REGION }}
+#      - name: Redeploy Service on EC2
+#        run: |
+#          aws ssm send-command \
+#            --document-name "AWS-RunShellScript" \
+#            --targets '[{"Key":"InstanceIds","Values":["${{ secrets.EC2_INSTANCE_ID }}"]}]' \
+#            --parameters 'commands=["cd /project/spring-curd/ && docker-compose pull spring-web-app && docker-compose up -d --no-deps spring-web-app"]' \
+#            --comment "Redeploy application"
