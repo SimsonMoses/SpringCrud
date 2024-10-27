@@ -25,6 +25,9 @@ jobs:
       - name: Read and Increment Version
         id: version
         run: |
+          
+          if [ ! -f VERSION ]; then echo "v0.0.0" > VERSION; fi
+          
           # Read the current version from the VERSION file
           version=$(cat VERSION)
           echo "Current version: $version"
@@ -56,5 +59,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /path/to/your/docker-compose
+            docker-compose down
             docker-compose pull content-ms
             docker-compose up -d --no-deps content-ms
