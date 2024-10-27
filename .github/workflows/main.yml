@@ -78,7 +78,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             echo "Deploying to EC2..."
-            echo "host:"+host+" username:"+username
+            echo "host:"+${{ secrets.AWS_EC2_HOST }}+" username:"+${{ secrets.AWS_EC2_USER }}
             cd /path/to/your/docker-compose
             docker-compose down
             docker-compose pull content-ms
