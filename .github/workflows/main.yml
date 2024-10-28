@@ -64,7 +64,7 @@ jobs:
           docker push simsonmoses/spring-crud:${{ env.VERSION }}
           docker push simsonmoses/spring-crud:latest
   deploy:
-    needs: build-docker
+    needs: build
     runs-on: ubuntu-latest
     env:
       EC2_SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
