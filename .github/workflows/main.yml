@@ -15,69 +15,60 @@ on:
         required: true
         default: "0"
 jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    env:
-#      docker_repository: ${{ secrets.DOCKER_REPOSITORY }}
-#      application_image: ${{ secrets.APPLICATION_IMAGE }}
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Set up Java
-#        uses: actions/setup-java@v2
-#        with:
-#          distribution: 'temurin'   # Use 'temurin' or your preferred JDK
-#          java-version: '17'        # Use Java 17 or your project's Java version
-#
-#      - name: Grant execute permission for Gradlew
-#        run: chmod +x ./gradlew
-#
-#      - name: Build with Gradle
-#        run: |
-#          ./gradlew clean build -x test  # Skips tests; remove `-x test` to include tests
-#
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v1
-#
-#      - name: Log in to Docker Hub
-#        uses: docker/login-action@v2
-#        with:
-#          username: ${{ secrets.DOCKER_USERNAME }}
-#          password: ${{ secrets.DOCKER_PASSWORD }}
-#
-#      - name: Read and Increment Version
-#        id: version
-#        run: |
-#
-#          if [ ! -f VERSION ]; then echo "v0.0.0" > VERSION; fi
-#
-#          # Read the current version from the VERSION file
-#          version=$(cat VERSION)
-#          echo "Current version: $version"
-#
-#          # Increment the patch version (v0.0.3 -> v0.0.4)
-#          new_version=$(echo "$version" | awk -F. -v OFS=. '{$NF += 1 ; print}')
-#          echo "New version: $new_version"
-#
-#          # Update VERSION file with the new version and output it as an environment variable
-#          echo "$new_version" > VERSION
-#          echo "VERSION=$new_version" >> $GITHUB_ENV
-#
-#      - name: Build Docker image with two tags
-#        env:
-#          VERSION: ${{ env.VERSION }}
-#        run: |
-#          # Build and tag with both version number and latest
-#          docker build -t ${docker_repository}/spring-crud:${{ env.VERSION }} -t ${docker_repository}/${application_image}:latest .
-#
-#      - name: Push Docker images to Docker Hub
-#        env:
-#          VERSION: ${{ env.VERSION }}
-#        run: |
-#          # Push both the versioned tag and latest
-#          docker push ${docker_repository}/${application_image}:${{ env.VERSION }}
-#          docker push ${docker_repository}/${application_image}:latest
+  build:
+    runs-on: ubuntu-latest
+    env:
+      docker_repository: ${{ secrets.DOCKER_REPOSITORY }}
+      application_image: ${{ secrets.APPLICATION_IMAGE }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'   # Use 'temurin' or your preferred JDK
+          java-version: '17'        # Use Java 17 or your project's Java version
+
+      - name: Grant execute permission for Gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: |
+          ./gradlew clean build -x test  # Skips tests; remove `-x test` to include tests
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Read and Increment Version
+        id: version
+        run: |
+          unique_version=$(date +'%Y%m%d-%H%M%S')
+          echo "Generated version: $unique_version"
+
+          # Set the unique version as an environment variable for later steps
+          echo "VERSION=$unique_version" >> $GITHUB_ENV
+
+      - name: Build Docker image with two tags
+        env:
+          VERSION: ${{ env.VERSION }}
+        run: |
+          # Build and tag with both version number and latest
+          docker build -t ${docker_repository}/spring-crud:${{ env.VERSION }} -t ${docker_repository}/${application_image}:latest .
+
+      - name: Push Docker images to Docker Hub
+        env:
+          VERSION: ${{ env.VERSION }}
+        run: |
+          # Push both the versioned tag and latest
+          docker push ${docker_repository}/${application_image}:${{ env.VERSION }}
+          docker push ${docker_repository}/${application_image}:latest
 #  deploy:
 #    needs: build
 #    runs-on: ubuntu-latest
@@ -119,31 +110,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Get Latest Docker Hub Tag
+      - name: UNIQUE VERSION
         id: version
         run: |
-          # Set up variables
-          major=${{ github.event.inputs.major }}
-          minor=${{ github.event.inputs.minor }}
-          repository=${{ secrets.DOCKER_REPOSITORY }}  # e.g., your-username/your-repo
+          unique_version=$(date +'%Y%m%d-%H%M%S')
+          echo "Generated version: $unique_version"
 
-          # Fetch tags from Docker Hub API
-          latest_tag=$(curl -s "https://hub.docker.com/v2/repositories/${repository}/tags/?page_size=100" | \
-                       jq -r '[.results[].name | select(startswith("v'${major}.${minor}'"))] | sort_by(.) | last')
-          
-          # Extract and increment the snapshot version
-          if [ -z "$latest_tag" ]; then
-            snapshot=0  # Start with 0 if no matching tag exists
-          else
-            snapshot=$(echo "$latest_tag" | awk -F. '{print $3 + 1}')
-          fi
-
-          # Construct new version
-          new_version="v${major}.${minor}.${snapshot}"
-          echo "New version: $new_version"
-
-          # Set the new version as an environment variable
-          echo "VERSION=$new_version" >> $GITHUB_ENV
+          # Set the unique version as an environment variable for later steps
+          echo "VERSION=$unique_version" >> $GITHUB_ENV
 
 
 #      - name: Setup SSH for EC2
