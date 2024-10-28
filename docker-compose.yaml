@@ -25,6 +25,7 @@ services:
       SPRING_DATASOURCE_USERNAME: app
       SPRING_DATASOURCE_PASSWORD: root
     ports:
+      - "9004:9004"
       - target: 9004
         published: 9004
         protocol: tcp

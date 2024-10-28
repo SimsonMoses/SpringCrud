@@ -8,12 +8,16 @@ import com.mindgraph.response.CommonResponse;
 import com.mindgraph.service.UserService;
 import org.hibernate.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class UserServiceImplementation implements UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImplementation.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -31,7 +35,9 @@ public class UserServiceImplementation implements UserService {
             response.setStatus(ResponseStatus.SUCCESS);
             response.setSuccessMessage("User has created successfully");
             response.setData(createUser);
+            log.info("User has created successfully");
         } else {
+            log.error("User with phone or email already exists!");
             response.setCode(409);
             response.setStatus(ResponseStatus.FAILED);
             response.setErrorMessage("User with phone or email already exists!");
@@ -49,7 +55,9 @@ public class UserServiceImplementation implements UserService {
             response.setStatus(ResponseStatus.SUCCESS);
             response.setSuccessMessage("Users have retrived successfully");
             response.setData(users);
+            log.info("Users have retrived successfully");
         }else{
+            log.error("No Users Exists!");
             response.setCode(404);
             response.setStatus(ResponseStatus.FAILED);
             response.setErrorMessage("No Users Exists!");
