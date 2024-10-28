@@ -101,7 +101,6 @@ jobs:
 #            docker stack deploy -c docker-compose.yaml spring-service
 
   tag:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Fetch and Increment Latest Version
