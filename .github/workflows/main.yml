@@ -4,7 +4,16 @@ on:
   push:
     branches:
       - main
-
+  workflow_dispatch:
+    inputs:
+      major:
+        description: "Major version number"
+        required: true
+        default: "0"
+      minor:
+        description: "Minor version number"
+        required: true
+        default: "0"
 jobs:
 #  build:
 #    runs-on: ubuntu-latest
@@ -102,34 +111,45 @@ jobs:
 
   tag:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch all history including tags
 
-      - name: Fetch and Increment Latest Version
+      - name: Calculate Version
         id: version
         run: |
-          # Fetch all tags and get the latest one (e.g., v0.0.3)
-          git fetch --tags
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "Latest tag: $latest_tag"
+          # Capture user inputs for major and minor versions
+          major=${{ github.event.inputs.major }}
+          minor=${{ github.event.inputs.minor }}
 
-          # Increment the patch version
-          new_version=$(echo "$latest_tag" | awk -F. -v OFS=. '{$NF += 1 ; print}')
+          # Find the latest tag with the specified major.minor pattern
+          latest_tag=$(git tag -l "${major}.${minor}.*" --sort=-v:refname | head -n 1)
+          echo "Latest tag matching ${major}.${minor} pattern: $latest_tag"
+
+          # Determine the snapshot version
+          if [ -z "$latest_tag" ]; then
+            snapshot=0  # Start with 0 if no matching tag exists
+          else
+            snapshot=$(echo "$latest_tag" | awk -F. '{print $3 + 1}')  # Increment the snapshot
+          fi
+          
+          # Construct the new version
+          new_version="${major}.${minor}.${snapshot}"
           echo "New version: $new_version"
 
           # Set the new version as an environment variable
           echo "VERSION=$new_version" >> $GITHUB_ENV
 
       - name: Tag and Push New Version
-        if: steps.version.outputs.VERSION != ''
         run: |
           git tag ${{ env.VERSION }}
           git push origin ${{ env.VERSION }}
         env:
           VERSION: ${{ env.VERSION }}
+        continue-on-error: true  # Continue if no changes were made
 
 
 #      - name: Setup SSH for EC2
