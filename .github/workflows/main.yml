@@ -8,7 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      docker_repository: ${{ secrets.DOCKER_REPOSITORY }}
+      application_image: ${{ secrets.APPLICATION_IMAGE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -56,13 +58,13 @@ jobs:
       - name: Build Docker image with two tags
         run: |
           # Build and tag with both version number and latest
-          docker build -t simsonmoses/spring-crud:${{ env.VERSION }} -t simsonmoses/spring-crud:latest .
+          docker build -t ${docker_repository}/spring-crud:${{ env.VERSION }} -t ${docker_repository}/${application_image}:latest .
 
       - name: Push Docker images to Docker Hub
         run: |
           # Push both the versioned tag and latest
-          docker push simsonmoses/spring-crud:${{ env.VERSION }}
-          docker push simsonmoses/spring-crud:latest
+          docker push ${docker_repository}/${application_image}:${{ env.VERSION }}
+          docker push ${docker_repository}/${application_image}:latest
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -70,6 +72,8 @@ jobs:
       EC2_SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
       EC2_URL: ${{ secrets.AWS_EC2_HOST }}
       EC2_USERNAME: ${{ secrets.AWS_EC2_USER }}
+      docker_repository: ${{ secrets.DOCKER_REPOSITORY }}
+      application_image: ${{ secrets.APPLICATION_IMAGE }}
     steps:
       - name: Prepare SSH Key
         run: |
@@ -83,15 +87,13 @@ jobs:
           host: ${{ secrets.AWS_EC2_HOST }}
           username: ${{ secrets.AWS_EC2_USER }}
           key: ${{ secrets.SSH_KEY }}
-          docker_repository: ${{ secrets.DOCKER_REPOSITORY }}
           script: |
             echo "Deploying to EC2..."
-            echo "host:"+${{ secrets.AWS_EC2_HOST }}+" username:"+${{ secrets.AWS_EC2_USER }}
             echo "key" > key && chmod 600 key
             ssh -i key ${USER_NAME}@${HOSTNAME}
             echo pwd
             cd /home/ec2-user/project/spring-crud
-            docker pull ${docker_repository}/spring-crud
+            docker pull ${docker_repository}/${application_image}
             docker stack deploy -c docker-compose.yaml spring-service
             
 
