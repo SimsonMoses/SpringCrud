@@ -6,12 +6,8 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    env:
-      EC2_SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-      EC2_URL: ${{ secrets.AWS_EC2_HOST }}
-      EC2_USERNAME: ${{ secrets.AWS_EC2_USER }}
 
     steps:
       - name: Checkout code
@@ -67,7 +63,14 @@ jobs:
           # Push both the versioned tag and latest
           docker push simsonmoses/spring-crud:${{ env.VERSION }}
           docker push simsonmoses/spring-crud:latest
-
+  deploy:
+    needs: build-docker
+    runs-on: ubuntu-latest
+    env:
+      EC2_SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+      EC2_URL: ${{ secrets.AWS_EC2_HOST }}
+      EC2_USERNAME: ${{ secrets.AWS_EC2_USER }}
+    steps:
       - name: Prepare SSH Key
         run: |
           mkdir -p /home/runner/.ssh  # Explicitly create the .ssh directory
